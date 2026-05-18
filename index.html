@@ -1252,8 +1252,6 @@ textarea.form-input { resize: vertical; min-height: 100px; }
 <div class="modal-overlay" id="twoFactorModal">
   <div class="modal">
     <div class="modal-title" style="margin-bottom:0.5rem; font-size:1.2rem">驗證哪一個是貓</div>
-    <label for="captcha-upload" class="upload-captcha-btn">📷 更換自訂圖片 (選取 9 張)</label>
-    <input type="file" id="captcha-upload" multiple accept="image/*" style="display:none" onchange="handleCaptchaUpload(this)">
     
     <div class="captcha-grid" id="captcha-grid">
       <!-- Generated via JS -->
@@ -1749,9 +1747,14 @@ function buildPostCard(post, isMyPage) {
     <div class="post-header">
       ${avatarHTML}
       <div class="post-meta">
-        <div class="post-author" onclick="goToProfile('${post.authorId}')" style="cursor:pointer">${escHtml(post.authorName)} <span>@${escHtml(post.authorId)}</span></div>
+        <div class="post-author" onclick="goToProfile('${post.authorId}')" style="cursor:pointer; color:var(--primary); font-weight:bold;">
+          ${escHtml(post.authorName)} <span style="font-weight:normal; color:var(--text-soft)">@${escHtml(post.authorId)}</span>
+        </div>
         <div class="post-time">${timeAgo}</div>
       </div>
+      <button class="btn btn-ghost" style="margin-left:auto; font-size:0.85rem; padding: 0.3rem 0.6rem; color: var(--primary); border: 1px solid var(--peach-soft); border-radius: 20px;" onclick="goToProfile('${post.authorId}')">
+        👤 個人主頁
+      </button>
     </div>
     <div class="post-topic">${escHtml(post.topic)}</div>
     <div class="post-content">${escHtml(post.content)}</div>
