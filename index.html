@@ -1429,32 +1429,22 @@ function doRegister() {
 // ═══════════════════════════════════════════
 let pendingLoginUser = null;
 
-let catPool = [
-  'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=200&q=80'
-];
-
-let nonCatPool = [
-  'https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1522276498395-f4f68f718df1?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1585110396000-c9faf4140f26?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1550399105-c4db5fb85c18?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1555169062-013468b47731?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1425082661705-1834bfd08d53?auto=format&fit=crop&w=200&q=80',
-  'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=200&q=80'
+let animalPool = [
+  { name: '貓', isCat: true, src: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=200&q=80' },
+  { name: '犀牛', isCat: false, src: 'https://images.unsplash.com/photo-1534062013894-31ea6734c89c?auto=format&fit=crop&w=200&q=80' },
+  { name: '大象', isCat: false, src: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=200&q=80' },
+  { name: '鱷魚', isCat: false, src: 'https://images.unsplash.com/photo-1519904250284-f3c25b39b5b9?auto=format&fit=crop&w=200&q=80' },
+  { name: '獅子', isCat: false, src: 'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=200&q=80' },
+  { name: '老虎', isCat: false, src: 'https://images.unsplash.com/photo-1503066211613-c17ebc9daef0?auto=format&fit=crop&w=200&q=80' },
+  { name: '烏龜', isCat: false, src: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=200&q=80' },
+  { name: '河馬', isCat: false, src: 'https://images.unsplash.com/photo-1533423996375-f914ab160932?auto=format&fit=crop&w=200&q=80' },
+  { name: '鳥', isCat: false, src: 'https://images.unsplash.com/photo-1555169062-013468b47731?auto=format&fit=crop&w=200&q=80' }
 ];
 
 let captchaImages = [];
 
 function shuffleCaptchaImages() {
-  const selectedCats = [...catPool].sort(() => Math.random() - 0.5).slice(0, 1).map(src => ({ src, isCat: true }));
-  const selectedNonCats = [...nonCatPool].sort(() => Math.random() - 0.5).slice(0, 8).map(src => ({ src, isCat: false }));
-  captchaImages = [...selectedCats, ...selectedNonCats].sort(() => Math.random() - 0.5);
+  captchaImages = [...animalPool].sort(() => Math.random() - 0.5);
 }
 
 function renderCaptchaGrid() {
@@ -1469,7 +1459,13 @@ function renderCaptchaGrid() {
     wrap.onclick = function() { this.classList.toggle('selected'); };
     const img = document.createElement('img');
     img.src = item.src;
-    img.onerror = function() { this.src = 'https://placehold.co/200x200/EEE/31343C?text=Image'; }; // fallback
+    img.onerror = function() {
+      const fallback = document.createElement('div');
+      fallback.style.cssText = 'width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#e2e8f0;color:#334155;font-size:3rem;line-height:1.2;';
+      const emojiMap = {'貓':'🐱','犀牛':'🦏','大象':'🐘','鱷魚':'🐊','獅子':'🦁','老虎':'🐯','烏龜':'🐢','河馬':'🦛','鳥':'🐦'};
+      fallback.innerHTML = `<div>${emojiMap[item.name] || '🐾'}</div><div style="font-size:1rem;font-weight:bold;margin-top:0.5rem">${item.name}</div>`;
+      wrap.replaceChild(fallback, img);
+    };
     wrap.appendChild(img);
     grid.appendChild(wrap);
   });
